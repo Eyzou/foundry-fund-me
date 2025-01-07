@@ -64,3 +64,23 @@ $ forge --help
 $ anvil --help
 $ cast --help
 ```
+
+lancer les tests:
+forge test -vvvv --fork-url RPC URL SEPOLIA
+
+tester le coverage des tests:
+source .env
+forge coverage --fork-url RPC URL SEPOLIA
+f
+
+Knowledge:
+    // STORAGE is a list//Array of all the variable - that persists and stored. each slot is 32 bytes long.
+    // DYNAMIC VALUE LIKE A MAPPING// ARRAY - remain inside the mapping (hashing function).
+    // the storage is only the length of the array or nil if mapping
+    // immutable and const are NOT in STORAGE! its a pointer to the value.
+    // Variable inside function are not permanent - and are deleted.
+    // we need memory keyword for string /array - memory or storage? need to be precised.
+    // command forget inspect FundMe storageLayout to see the STORAGE
+    // command cast storage
+    // everything is visible on the bc even private keyword
+    // evm.codes to see gas costs for each operation 33x more expensive to read/write from STORAGE# foundry-fund-me
