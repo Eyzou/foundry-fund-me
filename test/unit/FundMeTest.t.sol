@@ -9,7 +9,7 @@ import {DeployFundMe} from "../../script/DeployFundMe.s.sol";
 contract FundMeTest is Test {
     FundMe fundMe;
     //prank or makeAddr - to fake an address
-    address  USER = makeAddr("Elo");
+    address USER = makeAddr("Elo");
     uint256 constant SEND_VALUE = 0.1 ether;
     uint256 constant STARTING_VALUE = 10 ether;
     uint256 constant GAS_PRICE = 1;
@@ -39,28 +39,28 @@ contract FundMeTest is Test {
     }
 
     function testFundUpdatesFundedDataStructure() public {
-        vm.prank(USER);// next tx send by user
-        fundMe.fund{value:SEND_VALUE}();
+        vm.prank(USER); // next tx send by user
+        fundMe.fund{value: SEND_VALUE}();
         uint256 amountFunded = fundMe.getAddressToAmountFunded(USER);
         assertEq(amountFunded, SEND_VALUE);
     }
 
     function testAddsFunderToArrayOfFunders() public {
         vm.prank(USER);
-        fundMe.fund{value : SEND_VALUE}();
+        fundMe.fund{value: SEND_VALUE}();
         address funder = fundMe.getFunder(0);
         assertEq(funder, USER);
     }
 
     modifier funded() {
         vm.prank(USER);
-        fundMe.fund{value:SEND_VALUE}();
+        fundMe.fund{value: SEND_VALUE}();
         _;
     }
 
     function testOnlyOwnerCanWithdraw() public funded {
         vm.expectRevert();
-        vm.prank(USER);// the next line should revert!
+        vm.prank(USER); // the next line should revert!
         fundMe.withdraw(); //passed because it reverted ! as only owner can withdraw
     }
 
@@ -72,14 +72,15 @@ contract FundMeTest is Test {
         //uint256 gasStart= gasleft(); // built in function in solidity -1000
         //vm.txGasPrice(GAS_PRICE); // we can see txGasPrice
         vm.prank(fundMe.getOwner()); //
-        fundMe.withdraw(); // spend gas here  -200
+        fundMe.withdraw();
+        // spend gas here  -200
         //uint256 gasEnd = gasleft(); // 800
         //uint256 gasUsed = (gasStart - gasEnd) * tx.gasprice;
         //console.log(gasUsed);
 
         //Assert
         uint256 endingOwnerBalance = fundMe.getOwner().balance;
-        uint endingFundMeBalance = address(fundMe).balance;
+        uint256 endingFundMeBalance = address(fundMe).balance;
         assertEq(endingFundMeBalance, 0);
         assertEq(endingOwnerBalance, startingOwnerBalance + startingFundMeBalance);
     }
@@ -88,8 +89,8 @@ contract FundMeTest is Test {
         uint160 numberOfFunders = 10; // 160 to use addresses
         uint160 startingFunderIndex = 1; // sometimes the 0 address revert
         for (uint160 i = startingFunderIndex; i < numberOfFunders; i++) {
-            hoax(address(i),SEND_VALUE); //  prank and deal at the same time
-            fundMe.fund{value:SEND_VALUE}();
+            hoax(address(i), SEND_VALUE); //  prank and deal at the same time
+            fundMe.fund{value: SEND_VALUE}();
         }
 
         uint256 startingOwnerBalance = fundMe.getOwner().balance;
@@ -105,12 +106,12 @@ contract FundMeTest is Test {
         assert(startingOwnerBalance + startingFundMeBalance == fundMe.getOwner().balance);
     }
 
- function testCheaperWithdrawFromMultipleFunders() public funded {
+    function testCheaperWithdrawFromMultipleFunders() public funded {
         uint160 numberOfFunders = 10; // 160 to use addresses
         uint160 startingFunderIndex = 1; // sometimes the 0 address revert
         for (uint160 i = startingFunderIndex; i < numberOfFunders; i++) {
-            hoax(address(i),SEND_VALUE); //  prank and deal at the same time
-            fundMe.fund{value:SEND_VALUE}();
+            hoax(address(i), SEND_VALUE); //  prank and deal at the same time
+            fundMe.fund{value: SEND_VALUE}();
         }
 
         uint256 startingOwnerBalance = fundMe.getOwner().balance;
@@ -127,7 +128,6 @@ contract FundMeTest is Test {
     }
     // but it should be lower as we used gas to tx?
 }
-
 
 // Using CHISEL To debug
 // msg.sender is the address of the account that is calling the function.

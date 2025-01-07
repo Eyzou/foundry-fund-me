@@ -8,8 +8,8 @@ import {PriceConverter} from "./PriceConverter.sol";
 
 // 3. Interfaces, Libraries, Contracts
 error FundMe__NotOwner();
-contract FundMe {
 
+contract FundMe {
     using PriceConverter for uint256;
 
     mapping(address => uint256) private s_addressToAmountFunded;
@@ -17,7 +17,7 @@ contract FundMe {
 
     // Could we make this constant?  /* hint: no! We should make it immutable! */
     address private immutable i_owner;
-    uint256 public constant MINIMUM_USD = 5 * 10 ** 18; //5e18;
+    uint256 public constant MINIMUM_USD = 5 * 10 ** 18;
     AggregatorV3Interface private s_priceFeed;
 
     constructor(address _priceFeed) {
@@ -89,22 +89,20 @@ contract FundMe {
     receive() external payable {
         fund();
     }
-//View / Pure functions (Getters) - make private and only public or views function for getters
+    //View / Pure functions (Getters) - make private and only public or views function for getters
 
-    function getAddressToAmountFunded(address fundingAddress) external view returns (uint256){
-    return s_addressToAmountFunded[fundingAddress];
+    function getAddressToAmountFunded(address fundingAddress) external view returns (uint256) {
+        return s_addressToAmountFunded[fundingAddress];
     }
 
-    function getFunder(uint256 index) external view returns (address){
+    function getFunder(uint256 index) external view returns (address) {
         return s_funders[index];
     }
 
-    function getOwner() external view returns (address){
+    function getOwner() external view returns (address) {
         return i_owner;
     }
-
 }
-
 
 // Concepts we didn't cover yet (will cover in later sections)
 // 1. Enum
